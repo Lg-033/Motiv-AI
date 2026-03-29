@@ -1,0 +1,9 @@
+{
+  "name": "motive-ai",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Motive AI com frontend estatico e backend Node para proteger a chave da OpenAI.",
+  "scripts": {
+    "start": "node server.js"
+  }
+}
