@@ -123,14 +123,16 @@ Arquivos principais:
 - [abrir-server.cmd](C:\Users\lgmsv\OneDrive\Documentos\Motive AI\abrir-server.cmd)
 - [colocar-chave.cmd](C:\Users\lgmsv\OneDrive\Documentos\Motive AI\colocar-chave.cmd)
 - [iniciar-app.cmd](C:\Users\lgmsv\OneDrive\Documentos\Motive AI\iniciar-app.cmd)
+- [instalar-dependencias.cmd](C:\Users\lgmsv\OneDrive\Documentos\Motive AI\instalar-dependencias.cmd)
 
 Passos:
 
 1. Se quiser a forma mais simples, abra `colocar-chave.cmd` e cole sua chave em `openai-key.txt`.
 2. Se quiser editar o frontend, abra `abrir-app.cmd`.
 3. Se quiser editar o backend, abra `abrir-server.cmd`.
-4. Abra `iniciar-app.cmd`.
-5. Abra `http://localhost:3000`.
+4. Abra `instalar-dependencias.cmd` uma vez para instalar as dependencias.
+5. Abra `iniciar-app.cmd`.
+6. Abra `http://localhost:3000`.
 
 Exemplo no PowerShell:
 
@@ -142,6 +144,7 @@ npm start
 A chave fica no servidor e nao aparece no navegador do usuario.
 Se preferir, em vez da variavel de ambiente, o servidor tambem aceita a chave salva em `openai-key.txt`.
 Se o Node.js nao estiver instalado, `iniciar-app.cmd` vai te avisar antes de tentar rodar.
+O backend agora usa `express`, `cors` e `dotenv`.
 
 ## Publicar em um servidor
 
