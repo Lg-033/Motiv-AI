@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Motive AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <nav class="topbar">
+        <div class="brand">
+          <span class="brand-mark">M</span>
+          <span class="brand-name">Motive AI</span>
+        </div>
+        <a class="ghost-link" href="#chat">Experimentar</a>
+      </nav>
+
+      <div class="hero-grid">
+        <section class="hero-copy">
+          <p class="eyebrow">Motivacao pratica com apoio humano</p>
+          <h1>Uma IA para te motivar a fazer coisas com energia, clareza e passos simples.</h1>
+          <p class="hero-text">
+            Motive AI combina frases motivacionais, planos rapidos e foco no agora para te tirar da inercia. Quando necessario, tambem pode entrar em um modo psicologo para acolher e ajudar outras pessoas com mais cuidado.
+          </p>
+          <div class="hero-actions">
+            <a class="primary-button" href="#chat">Abrir conversa</a>
+            <a class="secondary-button" href="#como-funciona">Como funciona</a>
+          </div>
+          <ul class="hero-points">
+            <li>Frases motivacionais com energia e direcao</li>
+            <li>Planos rapidos e faceis de 5 minutos</li>
+            <li>Modo psicologo como apoio secundario</li>
+          </ul>
+        </section>
+
+        <aside class="hero-card">
+          <p class="card-label">Exemplo de motivacao</p>
+          <div class="quote-card">
+            <p>
+              "Voce nao precisa de vontade perfeita para comecar. Precisa so de um movimento pequeno.
+              Vamos fazer o primeiro agora e deixar o resto vir depois."
+            </p>
+          </div>
+          <div class="stat-row">
+            <div class="stat-card">
+              <strong>5 minutos</strong>
+              <span>para entrar em acao</span>
+            </div>
+            <div class="stat-card">
+              <strong>2 modos</strong>
+              <span>agir ou acolher</span>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </header>
+
+    <main>
+      <section class="feature-section" id="como-funciona">
+        <div class="section-heading">
+          <p class="eyebrow">Como funciona</p>
+          <h2>Um prototipo pensado para te colocar em movimento.</h2>
+        </div>
+        <div class="feature-grid">
+          <article class="feature-card">
+            <h3>Motivacao para agir</h3>
+            <p>O chat responde com energia, direcao e um plano rapido para voce sair da inercia.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Planos de 5 minutos</h3>
+            <p>Quando tudo parece grande demais, a IA quebra a meta em passos simples e faceis.</p>
+          </article>
+          <article class="feature-card">
+            <h3>Modo psicologo</h3>
+            <p>Se voce quiser acolher alguem ou precisar de uma conversa mais cuidadosa, existe um modo secundario para isso.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="chat-section" id="chat">
+        <div class="section-heading">
+          <p class="eyebrow">Prototipo</p>
+          <h2>Converse com a versao inicial do Motive AI.</h2>
+        </div>
+
+        <div class="chat-layout">
+          <aside class="control-panel">
+            <div class="panel-card">
+              <p class="panel-label">Escolha o modo</p>
+              <div class="mode-selector" id="mode-selector">
+                <button class="mode-button is-active" data-mode="motivador">Modo motivador</button>
+                <button class="mode-button" data-mode="psicologo">Modo psicologo</button>
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <p class="panel-label">Check-in rapido</p>
+              <div class="mood-selector" id="mood-selector">
+                <button class="mood-button" data-mood="sem-vontade">Sem vontade</button>
+                <button class="mood-button" data-mood="procrastinando">Procrastinando</button>
+                <button class="mood-button" data-mood="exausto">Exausto</button>
+                <button class="mood-button" data-mood="travado">Travado</button>
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <p class="panel-label">Atalhos de acao</p>
+              <div class="shortcut-list">
+                <button class="shortcut-button" data-shortcut="comecar">Me faz comecar</button>
+                <button class="shortcut-button" data-shortcut="foco">Me da foco rapido</button>
+                <button class="shortcut-button" data-shortcut="plano">Monta um plano facil</button>
+              </div>
+            </div>
+
+            <div class="panel-card">
+              <p class="panel-label">Acoes sugeridas</p>
+              <ul class="micro-list">
+                <li>Levantar agora</li>
+                <li>Abrir uma unica tarefa</li>
+                <li>Fazer 5 minutos sem perfeccionismo</li>
+                <li>Concluir o menor passo primeiro</li>
+              </ul>
+            </div>
+          </aside>
+
+          <section class="chat-card">
+            <div class="chat-header">
+              <div>
+                <p class="panel-label">Chat</p>
+                <h3>Motive AI</h3>
+              </div>
+              <button class="reset-button" id="reset-chat" type="button">Reiniciar</button>
+            </div>
+
+            <div class="chat-messages" id="chat-messages" aria-live="polite"></div>
+
+            <form class="chat-form" id="chat-form">
+              <label class="sr-only" for="user-input">Digite sua mensagem</label>
+              <textarea id="user-input" rows="3" placeholder="Ex: preciso de motivacao para estudar, treinar, trabalhar ou ajudar alguem..."></textarea>
+              <div class="form-actions">
+                <p class="helper-text">Use o modo motivador para agir e o modo psicologo para acolher com mais cuidado.</p>
+                <button class="primary-button" type="submit">Enviar</button>
+              </div>
+            </form>
+          </section>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
