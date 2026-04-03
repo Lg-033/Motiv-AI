@@ -3,11 +3,32 @@ const chatForm = document.getElementById("chat-form");
 const userInput = document.getElementById("user-input");
 const resetButton = document.getElementById("reset-chat");
 const modeButtons = document.querySelectorAll(".mode-button");
+const chatTitle = document.querySelector(".chat-header h3");
 
 let currentMode = "motivador";
 let memory = JSON.parse(localStorage.getItem("memory")) || {
   history: []
 };
+let userConfig = JSON.parse(localStorage.getItem("motive_config")) || null;
+
+function ensureUserConfig() {
+  if (userConfig) return userConfig;
+
+  const nome = window.prompt("Como voce quer chamar a sua IA?", "Motive") || "Motive";
+  const tom = window.prompt(
+    "Escolha o tom: casual com humor, direto e firme, acolhedor e calmo, intenso e motivador",
+    "acolhedor e calmo"
+  ) || "acolhedor e calmo";
+  const estilo = window.prompt("Escolha o estilo: curto, completo ou dinamico", "dinamico") || "dinamico";
+  const contexto = window.prompt(
+    "Contexto principal: estudos, trabalho, projetos pessoais ou geral",
+    "geral"
+  ) || "geral";
+
+  userConfig = { nome, tom, estilo, contexto };
+  localStorage.setItem("motive_config", JSON.stringify(userConfig));
+  return userConfig;
+}
 
 function addMessage(role, text) {
   const normalizedRole = role === "bot" ? "assistant" : role;
@@ -69,36 +90,46 @@ function getFollowUp() {
 
 async function getAIResponse(userText) {
   try {
-    const response = await fetch("/api/chat", {
+    const userMessage = userText;
+    const conversationHistory = memory.history;
+    const userConfig = ensureUserConfig();
+
+    const response = await fetch("https://motiv-ai-q470.onrender.com/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        message: userText,
+        message: userMessage,
         mode: currentMode,
-        history: memory.history
+        history: conversationHistory,
+        userConfig: userConfig
       })
     });
 
+    const data = await response.json();
+
     if (!response.ok) {
-      return "Deu erro ao falar com o servidor. Confere se o backend esta rodando e tenta de novo.";
+      return data.reply || "Deu erro ao falar com o servidor. Confere se o backend esta rodando e tenta de novo.";
     }
 
-    const data = await response.json();
-    return data.reply || "Deu um erro aqui... tenta de novo.";
+    return data.reply;
   } catch {
     return "Nao consegui conectar com o servidor. Para a IA responder de verdade, precisamos instalar e rodar o backend.";
   }
 }
 
 function setInitialConversation() {
+  const config = ensureUserConfig();
   chatMessages.innerHTML = "";
+  if (chatTitle) {
+    chatTitle.textContent = `Conversando com ${config.nome}`;
+  }
 
   const initialText =
     currentMode === "motivador"
-      ? "Voce nao precisa fazer tudo agora. Me diz qual e a proxima coisa que voce quer destravar."
-      : "To aqui com voce. Me conta o que ta pegando agora.";
+      ? `oi! sou ${config.nome}, sua IA do Motive. voce nao precisa resolver tudo agora. me diz qual e a proxima coisa que voce quer destravar.`
+      : `oi! sou ${config.nome}. nesse modo eu vou te ouvir com calma, sem te empurrar. me conta o que ta pegando agora.`;
 
   addMessage("assistant", initialText);
 }
@@ -149,4 +180,5 @@ if (resetButton) {
   });
 }
 
+ensureUserConfig();
 setInitialConversation();
