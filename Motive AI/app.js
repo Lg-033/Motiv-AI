@@ -94,7 +94,7 @@ async function getAIResponse(userText) {
     const conversationHistory = memory.history;
     const userConfig = ensureUserConfig();
 
-    const response = await fetch("https://motiv-ai-q470.onrender.com/chat", {
+    const response = await fetch("https://motiv-ai-q470.onrender.com/api/chat", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
