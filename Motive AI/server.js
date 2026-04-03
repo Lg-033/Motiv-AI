@@ -244,7 +244,7 @@ app.post("/api/chat", async (req, res) => {
         Authorization: `Bearer ${openAiApiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        model: "gpt-4o",
         messages: [
           {
             role: "system",
