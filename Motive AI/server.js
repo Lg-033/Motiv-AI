@@ -12,9 +12,9 @@ app.use(cors());
 app.use(express.json());
 app.use(express.static(ROOT));
 
-function getOpenAiApiKey() {
-  const apiKey = process.env.OPENAI_API_KEY;
-  console.log("API KEY EXISTE?", !!apiKey);
+function getGroqApiKey() {
+  const apiKey = process.env.GROQ_API_KEY;
+  console.log("GROQ API KEY EXISTE?", !!apiKey);
   return apiKey ? apiKey.trim() : "";
 }
 
@@ -218,12 +218,12 @@ app.get("/health", (_req, res) => {
 });
 
 app.post("/api/chat", async (req, res) => {
-  const openAiApiKey = getOpenAiApiKey();
+  const groqApiKey = getGroqApiKey();
 
-  if (!openAiApiKey) {
-    console.error("OPENAI_API_KEY ausente no servidor.");
+  if (!groqApiKey) {
+    console.error("GROQ_API_KEY ausente no servidor.");
     res.status(500).json({
-      reply: "A chave da OpenAI nao foi configurada no servidor. Coloque a chave em openai-key.txt ou na variavel OPENAI_API_KEY."
+      reply: "A chave da Groq nao foi configurada no servidor. Adicione a variavel GROQ_API_KEY."
     });
     return;
   }
@@ -232,47 +232,49 @@ app.post("/api/chat", async (req, res) => {
     const body = req.body || {};
     const message = body.message || "";
     const mode = body.mode || "motivador";
-    const history = Array.isArray(body.history) ? body.history.slice(-10) : [];
+    const history = Array.isArray(body.history) ? body.history.slice(-12) : [];
     const userConfig = body.userConfig || {};
 
-    const context = history.map((item) => `Usuario: ${item.user}`).join("\n");
+    const messages = [
+      {
+        role: "system",
+        content: buildSystemPrompt(mode, userConfig)
+      },
+      ...history.map((item) => [
+        { role: "user", content: item.user },
+        ...(item.assistant ? [{ role: "assistant", content: item.assistant }] : [])
+      ]).flat(),
+      { role: "user", content: message }
+    ];
 
-    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+    const groqResponse = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${openAiApiKey}`
+        Authorization: `Bearer ${groqApiKey}`
       },
       body: JSON.stringify({
-        model: "gpt-4o",
-        messages: [
-          {
-            role: "system",
-            content: buildSystemPrompt(mode, userConfig)
-          },
-          {
-            role: "user",
-            content: `Contexto recente:\n${context}\n\nMensagem atual:\n${message}`
-          }
-        ],
-        temperature: 0.9
+        model: "llama-3.3-70b-versatile",
+        messages,
+        temperature: 0.9,
+        max_tokens: 512
       })
     });
 
-    if (!openaiResponse.ok) {
-      const errorText = await openaiResponse.text();
-      console.error("Erro da OpenAI:", errorText);
+    if (!groqResponse.ok) {
+      const errorText = await groqResponse.text();
+      console.error("Erro da Groq:", errorText);
       res.status(502).json({
-        reply: `Erro ao chamar a OpenAI: ${errorText}`
+        reply: `Erro ao chamar a Groq: ${errorText}`
       });
       return;
     }
 
-    const data = await openaiResponse.json();
+    const data = await groqResponse.json();
     const reply = data?.choices?.[0]?.message?.content;
 
     res.json({
-      reply: reply || "Deu erro ao interpretar a resposta da OpenAI."
+      reply: reply || "Deu erro ao interpretar a resposta da Groq."
     });
   } catch (error) {
     console.error("Erro interno no /api/chat:", error);
